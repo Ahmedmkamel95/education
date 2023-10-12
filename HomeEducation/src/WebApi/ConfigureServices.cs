@@ -20,7 +20,8 @@ public static class ConfigureServices
         services.AddHealthChecks()
             .AddDbContextCheck<ApplicationDbContext>();
 
-        services.AddControllersWithViews();
+        //services.AddControllersWithViews();
+
 
        // services.AddRazorPages();
 

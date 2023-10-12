@@ -1,7 +1,11 @@
 ﻿using System.Reflection;
+using System.Reflection.Emit;
+using System.Reflection.Metadata;
 using Duende.IdentityServer.EntityFramework.Options;
 using HomeEducation.Application.Common.Interfaces;
 using HomeEducation.Domain.Entities;
+using HomeEducation.Domain.Enums;
+
 using HomeEducation.Infrastructure.Identity;
 using HomeEducation.Infrastructure.Persistence.Interceptors;
 using MediatR;
@@ -26,9 +30,6 @@ public class ApplicationDbContext : ApiAuthorizationDbContext<ApplicationUser>, 
         _auditableEntitySaveChangesInterceptor = auditableEntitySaveChangesInterceptor;
     }
 
-    public DbSet<TodoList> TodoLists => Set<TodoList>();
-
-    public DbSet<TodoItem> TodoItems => Set<TodoItem>();
 
     protected override void OnModelCreating(ModelBuilder builder)
     {
