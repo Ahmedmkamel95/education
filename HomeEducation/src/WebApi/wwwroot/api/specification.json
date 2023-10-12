@@ -6,6 +6,46 @@
     "version": "1.0.0"
   },
   "paths": {
+    "/api/Levels": {
+      "get": {
+        "tags": [
+          "Levels"
+        ],
+        "operationId": "Levels_GetLevels",
+        "parameters": [
+          {
+            "name": "PageNumber",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            },
+            "x-position": 1
+          },
+          {
+            "name": "PageSize",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            },
+            "x-position": 2
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetLevelsDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/WeatherForecast": {
       "get": {
         "tags": [
@@ -32,6 +72,42 @@
   },
   "components": {
     "schemas": {
+      "GetLevelsDto": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "primary": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/PhaseGradeDto"
+            }
+          },
+          "preparatory": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/PhaseGradeDto"
+            }
+          },
+          "secondary": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/PhaseGradeDto"
+            }
+          }
+        }
+      },
+      "PhaseGradeDto": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "levelId": {
+            "type": "string"
+          },
+          "title": {
+            "type": "string"
+          }
+        }
+      },
       "WeatherForecast": {
         "type": "object",
         "additionalProperties": false,
