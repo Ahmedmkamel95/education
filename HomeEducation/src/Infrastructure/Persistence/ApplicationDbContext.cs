@@ -3,8 +3,8 @@ using System.Reflection.Emit;
 using System.Reflection.Metadata;
 using Duende.IdentityServer.EntityFramework.Options;
 using HomeEducation.Application.Common.Interfaces;
-using HomeEducation.Domain.Entities;
-using HomeEducation.Domain.Enums;
+/*using HomeEducation.Domain.Entities;
+using HomeEducation.Domain.Enums;*/
 
 using HomeEducation.Infrastructure.Identity;
 using HomeEducation.Infrastructure.Persistence.Interceptors;

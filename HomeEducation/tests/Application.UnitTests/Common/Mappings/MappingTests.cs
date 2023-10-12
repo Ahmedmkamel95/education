@@ -1,9 +1,6 @@
 ﻿using System.Runtime.Serialization;
 using AutoMapper;
 using HomeEducation.Application.Common.Mappings;
-using HomeEducation.Application.Common.Models;
-
-using HomeEducation.Domain.Entities;
 using NUnit.Framework;
 
 namespace HomeEducation.Application.UnitTests.Common.Mappings;

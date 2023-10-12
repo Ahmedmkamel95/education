@@ -1,5 +1,4 @@
-﻿using HomeEducation.Domain.Entities;
-using HomeEducation.Infrastructure.Identity;
+﻿using HomeEducation.Infrastructure.Identity;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;

@@ -1,7 +1,4 @@
-﻿using HomeEducation.Domain.Entities;
-using Microsoft.EntityFrameworkCore;
-
-namespace HomeEducation.Application.Common.Interfaces;
+﻿namespace HomeEducation.Application.Common.Interfaces;
 public interface IApplicationDbContext
 {
 
