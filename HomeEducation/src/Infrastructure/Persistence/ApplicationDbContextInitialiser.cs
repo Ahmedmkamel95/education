@@ -73,6 +73,6 @@ public class ApplicationDbContextInitialiser
 
         // Default data
         // Seed, if necessary
-       
+
     }
 }

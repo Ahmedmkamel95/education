@@ -22,6 +22,7 @@ public static class ConfigureServices
 
         //services.AddControllersWithViews();
 
+
        // services.AddRazorPages();
 
         services.AddScoped<FluentValidationSchemaProcessor>(provider =>

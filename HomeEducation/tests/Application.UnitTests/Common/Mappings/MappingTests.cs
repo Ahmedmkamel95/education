@@ -2,6 +2,7 @@
 using AutoMapper;
 using HomeEducation.Application.Common.Mappings;
 using HomeEducation.Application.Common.Models;
+
 using HomeEducation.Domain.Entities;
 using NUnit.Framework;
 
@@ -30,6 +31,7 @@ public class MappingTests
     //[TestCase(typeof(TodoItem), typeof(TodoItemDto))]
     //[TestCase(typeof(TodoList), typeof(LookupDto))]
     //[TestCase(typeof(TodoItem), typeof(LookupDto))]
+
     public void ShouldSupportMappingFromSourceToDestination(Type source, Type destination)
     {
         var instance = GetInstanceOf(source);
