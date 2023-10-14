@@ -3,32 +3,35 @@ using HomeEducation.Application.Common.Interfaces;
 using HomeEducation.Application.Queries.GetLevels;
 using HomeEducation.Domain.Enums;
 using MediatR;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.Extensions.Options;
 
 namespace HomeEducation.Application.TodoItems.Queries.GetTodoItemsWithPagination;
 public record GetLevelsQuery : IRequest<GetLevelsDto>
 {
-    public int PageNumber { get; init; } = 1;
-    public int PageSize { get; init; } = 10;
+   
 }
 
 public class GetLevelsQueryHandler : IRequestHandler<GetLevelsQuery, GetLevelsDto>
 {
     private readonly IApplicationDbContext _context;
     private readonly IMapper _mapper;
+    private readonly IOptions<RequestLocalizationOptions> _options;
 
-    public GetLevelsQueryHandler(IApplicationDbContext context, IMapper mapper)
+    public GetLevelsQueryHandler(IApplicationDbContext context, IMapper mapper, IOptions<RequestLocalizationOptions> options)
     {
         _context = context;
         _mapper = mapper;
+        _options = options;
     }
 
     public async Task<GetLevelsDto> Handle(GetLevelsQuery request, CancellationToken cancellationToken)
     {
         return new GetLevelsDto
         { 
-            Primary = _mapper.Map<List<PhaseGradeDto>>(_context.Levels.Where(x => x.Phase == StudyPhase.Primary)),
-            Preparatory = _mapper.Map<List<PhaseGradeDto>>(_context.Levels.Where(x => x.Phase == StudyPhase.Preparatory)),
-            Secondary = _mapper.Map<List<PhaseGradeDto>>(_context.Levels.Where(x => x.Phase == StudyPhase.Secondary)),
+            Primary = _mapper.Map<List<PhaseGradeDto>>(_context.Levels.Where(x => x.Phase == StudyPhase.Primary), opt => opt.Items["culture"] = _options.Value.DefaultRequestCulture.Culture.Name),
+            Preparatory = _mapper.Map<List<PhaseGradeDto>>(_context.Levels.Where(x => x.Phase == StudyPhase.Preparatory), opt => opt.Items["culture"] = _options.Value.DefaultRequestCulture.Culture.Name),
+            Secondary = _mapper.Map<List<PhaseGradeDto>>(_context.Levels.Where(x => x.Phase == StudyPhase.Secondary), opt => opt.Items["culture"] = _options.Value.DefaultRequestCulture.Culture.Name),
         };
     }
 }

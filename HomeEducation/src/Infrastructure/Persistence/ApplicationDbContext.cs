@@ -35,20 +35,20 @@ public class ApplicationDbContext : ApiAuthorizationDbContext<ApplicationUser>, 
     {
         builder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
         builder.Entity<Level>().HasData(
-            new Level { Id = "1Primary", Title = "First", Phase = StudyPhase.Primary },
-            new Level { Id = "2Primary", Title = "Second", Phase = StudyPhase.Primary },
-            new Level { Id = "3Primary", Title = "Third", Phase = StudyPhase.Primary },
-            new Level { Id = "4Primary", Title = "Fourth", Phase = StudyPhase.Primary },
-            new Level { Id = "5Primary", Title = "Fifth", Phase = StudyPhase.Primary },
-            new Level { Id = "6Primary", Title = "Sixth", Phase = StudyPhase.Primary },
+            new Level { Id = "1Primary", TitleEn = "First", TitleAr = "الاول", Phase = StudyPhase.Primary },
+            new Level { Id = "2Primary", TitleEn = "Second", TitleAr = "الثاني", Phase = StudyPhase.Primary },
+            new Level { Id = "3Primary", TitleEn = "Third", TitleAr = "الثالث", Phase = StudyPhase.Primary },
+            new Level { Id = "4Primary", TitleEn = "Fourth", TitleAr = "الرابع", Phase = StudyPhase.Primary },
+            new Level { Id = "5Primary", TitleEn = "Fifth", TitleAr = "الخامس", Phase = StudyPhase.Primary },
+            new Level { Id = "6Primary", TitleEn = "Sixth", TitleAr = "السادس", Phase = StudyPhase.Primary },
 
-            new Level { Id = "1Prepare", Title = "First", Phase = StudyPhase.Preparatory },
-            new Level { Id = "2Prepare", Title = "Second", Phase = StudyPhase.Preparatory },
-            new Level { Id = "3Prepare", Title = "Third", Phase = StudyPhase.Preparatory },
+            new Level { Id = "1Prepare", TitleEn = "First", TitleAr = "الاول", Phase = StudyPhase.Preparatory },
+            new Level { Id = "2Prepare", TitleEn = "Second", TitleAr = "الثاني", Phase = StudyPhase.Preparatory },
+            new Level { Id = "3Prepare", TitleEn = "Third", TitleAr = "الثالث", Phase = StudyPhase.Preparatory },
 
-            new Level { Id = "1Secondary", Title = "First", Phase = StudyPhase.Secondary },
-            new Level { Id = "2Secondary", Title = "Second", Phase = StudyPhase.Secondary },
-            new Level { Id = "3Secondary", Title = "Third", Phase = StudyPhase.Secondary }
+            new Level { Id = "1Secondary", TitleEn = "First", TitleAr = "الاول", Phase = StudyPhase.Secondary },
+            new Level { Id = "2Secondary", TitleEn = "Second", TitleAr = "الثاني", Phase = StudyPhase.Secondary },
+            new Level { Id = "3Secondary", TitleEn = "Third", TitleAr = "الثالث", Phase = StudyPhase.Secondary }
 
             );
         base.OnModelCreating(builder);

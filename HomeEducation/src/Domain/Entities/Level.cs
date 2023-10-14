@@ -4,7 +4,8 @@ namespace HomeEducation.Domain.Entities;
 
 public class Level : BaseAuditableEntity
 {
-    public string Title { get; set; }
+    public string TitleEn { get; set; }
+    public string TitleAr { get; set; }
     public StudyPhase Phase { get; set; }
 
 }

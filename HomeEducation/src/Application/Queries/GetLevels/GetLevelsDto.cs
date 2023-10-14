@@ -20,6 +20,6 @@ public class PhaseGradeDto:IMapFrom<Level>
     {
         profile.CreateMap<Level, PhaseGradeDto>()
             .ForMember(d => d.LevelId, opt => opt.MapFrom(s => s.Id))
-            ;
+            .AfterMap((s,d,context) => d.Title = context.TryGetItems(out var Items) ? context.Items["culture"].ToString() == "ar" ? s.TitleAr : s.TitleEn : s.TitleEn);
     }
 }

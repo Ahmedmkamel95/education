@@ -12,26 +12,6 @@
           "Levels"
         ],
         "operationId": "Levels_GetLevels",
-        "parameters": [
-          {
-            "name": "PageNumber",
-            "in": "query",
-            "schema": {
-              "type": "integer",
-              "format": "int32"
-            },
-            "x-position": 1
-          },
-          {
-            "name": "PageSize",
-            "in": "query",
-            "schema": {
-              "type": "integer",
-              "format": "int32"
-            },
-            "x-position": 2
-          }
-        ],
         "responses": {
           "200": {
             "description": "",

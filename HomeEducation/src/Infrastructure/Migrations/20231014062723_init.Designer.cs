@@ -9,10 +9,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
 
-namespace HomeEducation.Infrastructure.Persistence.Migrations
+namespace HomeEducation.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20231012104849_init")]
+    [Migration("20231014062723_init")]
     partial class init
     {
         /// <inheritdoc />
@@ -186,7 +186,11 @@ namespace HomeEducation.Infrastructure.Persistence.Migrations
                     b.Property<int>("Phase")
                         .HasColumnType("int");
 
-                    b.Property<string>("Title")
+                    b.Property<string>("TitleAr")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("TitleEn")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -200,84 +204,96 @@ namespace HomeEducation.Infrastructure.Persistence.Migrations
                             Id = "1Primary",
                             Created = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Phase = 0,
-                            Title = "First"
+                            TitleAr = "الاول",
+                            TitleEn = "First"
                         },
                         new
                         {
                             Id = "2Primary",
                             Created = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Phase = 0,
-                            Title = "Second"
+                            TitleAr = "الثاني",
+                            TitleEn = "Second"
                         },
                         new
                         {
                             Id = "3Primary",
                             Created = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Phase = 0,
-                            Title = "Third"
+                            TitleAr = "الثالث",
+                            TitleEn = "Third"
                         },
                         new
                         {
                             Id = "4Primary",
                             Created = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Phase = 0,
-                            Title = "Fourth"
+                            TitleAr = "الرابع",
+                            TitleEn = "Fourth"
                         },
                         new
                         {
                             Id = "5Primary",
                             Created = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Phase = 0,
-                            Title = "Fifth"
+                            TitleAr = "الخامس",
+                            TitleEn = "Fifth"
                         },
                         new
                         {
                             Id = "6Primary",
                             Created = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Phase = 0,
-                            Title = "Sixth"
+                            TitleAr = "السادس",
+                            TitleEn = "Sixth"
                         },
                         new
                         {
                             Id = "1Prepare",
                             Created = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Phase = 1,
-                            Title = "First"
+                            TitleAr = "الاول",
+                            TitleEn = "First"
                         },
                         new
                         {
                             Id = "2Prepare",
                             Created = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Phase = 1,
-                            Title = "Second"
+                            TitleAr = "الثاني",
+                            TitleEn = "Second"
                         },
                         new
                         {
                             Id = "3Prepare",
                             Created = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Phase = 1,
-                            Title = "Third"
+                            TitleAr = "الثالث",
+                            TitleEn = "Third"
                         },
                         new
                         {
                             Id = "1Secondary",
                             Created = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Phase = 2,
-                            Title = "First"
+                            TitleAr = "الاول",
+                            TitleEn = "First"
                         },
                         new
                         {
                             Id = "2Secondary",
                             Created = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Phase = 2,
-                            Title = "Second"
+                            TitleAr = "الثاني",
+                            TitleEn = "Second"
                         },
                         new
                         {
                             Id = "3Secondary",
                             Created = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Phase = 2,
-                            Title = "Third"
+                            TitleAr = "الثالث",
+                            TitleEn = "Third"
                         });
                 });
 
