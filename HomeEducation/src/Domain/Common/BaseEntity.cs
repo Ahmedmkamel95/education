@@ -1,9 +1,12 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace HomeEducation.Domain.Common;
 public abstract class BaseEntity
 {
-    public int Id { get; set; }
+    [Required]
+    [Key]
+    public string Id { get; set; }
 
     private readonly List<BaseEvent> _domainEvents = new();
 

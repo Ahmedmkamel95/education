@@ -1,4 +1,6 @@
 using HomeEducation.Infrastructure.Persistence;
+using Microsoft.AspNetCore.Localization;
+using Microsoft.Extensions.Options;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -6,6 +8,19 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddApplicationServices();
 builder.Services.AddInfrastructureServices(builder.Configuration);
 builder.Services.AddWebApiServices();
+
+builder.Services.Configure<RequestLocalizationOptions>(options =>
+{
+    options.RequestCultureProviders.Clear();
+    options.RequestCultureProviders.Insert(0, new CustomRequestCultureProvider(async context =>
+    {
+        var userLangs = context.Request.Headers["Accept-Language"].ToString();
+        var lang = userLangs.Split(',').FirstOrDefault();
+        options.SetDefaultCulture(lang);
+        options.AddSupportedCultures(lang);
+        return new ProviderCultureResult(lang);
+    }));
+});
 
 var app = builder.Build();
 
@@ -28,7 +43,7 @@ else
     // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
 }
-
+app.UseRequestLocalization();
 app.UseHealthChecks("/health");
 app.UseHttpsRedirection();
 app.UseStaticFiles();
@@ -44,7 +59,6 @@ app.UseRouting();
 app.UseAuthentication();
 app.UseIdentityServer();
 app.UseAuthorization();
-
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller}/{action=Index}/{id?}");
