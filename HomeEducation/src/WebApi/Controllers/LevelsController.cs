@@ -1,9 +1,11 @@
 ﻿using HomeEducation.Application.Queries.GetLevels;
 using HomeEducation.Application.TodoItems.Queries.GetTodoItemsWithPagination;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Options;
 
 namespace HomeEducation.WebApi.Controllers;
+
+[Authorize(AuthenticationSchemes = "Bearer")]
 public class LevelsController : ApiControllerBase
 {
 

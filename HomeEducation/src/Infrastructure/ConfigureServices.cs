@@ -41,18 +41,11 @@ public static class ConfigureServices
 
         services.AddTransient<IDateTime, DateTimeService>();
         services.AddTransient<IIdentityService, IdentityService>();
+        services.AddTransient<IJwtProvider, JwtProvider>();
+        services.AddTransient<JwtOptions>();
 
-        services.AddAuthentication("Bearer").AddJwtBearer("Bearer", options =>
-        {
-            options.Authority = "https://localhost:44312";
-            options.TokenValidationParameters = new TokenValidationParameters
-            {
-                ValidateAudience = false
-            };
-        });//.AddIdentityServerJwt();
-
-        services.AddAuthorization(options =>
-            options.AddPolicy("CanPurge", policy => policy.RequireRole("Administrator")));
+        /*services.AddAuthorization(options =>
+            options.AddPolicy("CanPurge", policy => policy.RequireRole("Administrator")));*/
 
         return services;
     }

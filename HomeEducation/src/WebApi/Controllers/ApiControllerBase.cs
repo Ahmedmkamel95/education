@@ -3,6 +3,7 @@ using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
 namespace HomeEducation.WebApi.Controllers;
+
 [ApiController]
 [ApiExceptionFilter]
 [Route("api/[controller]")]

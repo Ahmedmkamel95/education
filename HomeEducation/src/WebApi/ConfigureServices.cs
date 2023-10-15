@@ -1,9 +1,11 @@
 ﻿using HomeEducation.Application.Common.Interfaces;
 using HomeEducation.Infrastructure.Persistence;
 using HomeEducation.WebApi.Services;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Mvc;
 using NSwag;
 using NSwag.Generation.Processors.Security;
+using WebApi.OptionsSetup;
 using ZymLabs.NSwag.FluentValidation;
 
 namespace Microsoft.Extensions.DependencyInjection;
@@ -56,6 +58,11 @@ public static class ConfigureServices
             configure.OperationProcessors.Add(new AspNetCoreOperationSecurityScopeProcessor("JWT"));
         });
 
+        services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+            .AddJwtBearer();
+
+        services.ConfigureOptions<JwtOptionsSetup>();
+        //services.ConfigureOptions<JwtBearerOptionsSetup>();
         return services;
     }
 }

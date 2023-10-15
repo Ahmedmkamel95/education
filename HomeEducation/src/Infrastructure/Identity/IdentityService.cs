@@ -8,17 +8,23 @@ namespace HomeEducation.Infrastructure.Identity;
 public class IdentityService : IIdentityService
 {
     private readonly UserManager<ApplicationUser> _userManager;
+    private readonly SignInManager<ApplicationUser> _signInManager;
     private readonly IUserClaimsPrincipalFactory<ApplicationUser> _userClaimsPrincipalFactory;
     private readonly IAuthorizationService _authorizationService;
+    private readonly IJwtProvider _jwtProvider;
 
     public IdentityService(
         UserManager<ApplicationUser> userManager,
         IUserClaimsPrincipalFactory<ApplicationUser> userClaimsPrincipalFactory,
-        IAuthorizationService authorizationService)
+        IAuthorizationService authorizationService,
+        IJwtProvider jwtProvider,
+        SignInManager<ApplicationUser> signInManager)
     {
         _userManager = userManager;
         _userClaimsPrincipalFactory = userClaimsPrincipalFactory;
         _authorizationService = authorizationService;
+        _jwtProvider = jwtProvider;
+        _signInManager = signInManager;
     }
 
     public async Task<string?> GetUserNameAsync(string userId)
@@ -28,7 +34,7 @@ public class IdentityService : IIdentityService
         return user.UserName;
     }
 
-    public async Task<(Result Result, string UserId)> CreateUserAsync(string userName, string password)
+    public async Task<(Result<string> Result, string UserId)> CreateUserAsync(string userName, string password)
     {
         var user = new ApplicationUser
         {
@@ -39,6 +45,20 @@ public class IdentityService : IIdentityService
         var result = await _userManager.CreateAsync(user, password);
 
         return (result.ToApplicationResult(), user.Id);
+    }
+    public async Task<Result<string>> AuthenticateUserAsync(string email, string password)
+    {
+        bool isAuthenticated = false;
+        var user = await _userManager.FindByEmailAsync(email);
+        if(user != null)
+            isAuthenticated = await _userManager.CheckPasswordAsync(user, password);
+        //_signInManager.PasswordSignInAsync(user, password);
+        if(!isAuthenticated)
+        {
+            return Result<string>.Failure(new string[] { "Authentication Faild"});
+        }
+        var token = _jwtProvider.GenerateJwtToken(user);
+        return Result<string>.Success(token);
     }
 
     public async Task<bool> IsInRoleAsync(string userId, string role)
@@ -64,17 +84,19 @@ public class IdentityService : IIdentityService
         return result.Succeeded;
     }
 
-    public async Task<Result> DeleteUserAsync(string userId)
+    public async Task<Result<string>> DeleteUserAsync(string userId)
     {
         var user = _userManager.Users.SingleOrDefault(u => u.Id == userId);
 
-        return user != null ? await DeleteUserAsync(user) : Result.Success();
+        return user != null ? await DeleteUserAsync(user) : Result<string>.Success("");
     }
 
-    public async Task<Result> DeleteUserAsync(ApplicationUser user)
+    public async Task<Result<string>> DeleteUserAsync(ApplicationUser user)
     {
         var result = await _userManager.DeleteAsync(user);
 
         return result.ToApplicationResult();
     }
+
+   
 }

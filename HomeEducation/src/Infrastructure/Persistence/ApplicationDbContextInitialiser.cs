@@ -1,4 +1,5 @@
-﻿using HomeEducation.Infrastructure.Identity;
+﻿using HomeEducation.Domain.Entities;
+using HomeEducation.Infrastructure.Identity;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
@@ -68,7 +69,11 @@ public class ApplicationDbContextInitialiser
             {
                 await _userManager.AddToRolesAsync(administrator, new[] { administratorRole.Name });
             }
+
         }
+           /* User user = new User() { Email = "administrator@localhost" , Id = new Guid().ToString(), UserName="admin", PhoneNumber ="01241564864"};
+            await _context.AddAsync(user);
+            await _context.SaveChangesAsync();*/
 
         // Default data
         // Seed, if necessary
