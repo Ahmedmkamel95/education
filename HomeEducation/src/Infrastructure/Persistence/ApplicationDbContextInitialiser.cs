@@ -71,9 +71,13 @@ public class ApplicationDbContextInitialiser
             }
 
         }
-           /* User user = new User() { Email = "administrator@localhost" , Id = new Guid().ToString(), UserName="admin", PhoneNumber ="01241564864"};
+        if (_context.Users.All(u => u.Email != administrator.Email))
+        {
+            User user = new User() { Email = "administrator@localhost", Id = new Guid().ToString(), FirstName = "admin", 
+                LastName="admin", UserType = Domain.Enums.ApplicationUserTypes.Admin, PhoneNumber = "01241564864" };
             await _context.AddAsync(user);
-            await _context.SaveChangesAsync();*/
+            await _context.SaveChangesAsync();
+        }
 
         // Default data
         // Seed, if necessary

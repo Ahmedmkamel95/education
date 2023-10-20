@@ -14,14 +14,6 @@ public class UserManagementController : ApiControllerBase
        
     }
 
-    [HttpPost]
-    public async Task<IActionResult> CreateUser([FromBody]AddUserRequestDto signUpRequest)
-    {
-        var result = await Mediator.Send(new UserManagementCommand(signUpRequest, HomeEducation.Domain.Enums.ApplicationUserTypes.Admin));
-
-        return Created("", result);
-    }
-
     [Route("/identity/login")]
     [AllowAnonymous]
     [HttpPost]

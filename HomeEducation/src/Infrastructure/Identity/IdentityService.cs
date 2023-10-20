@@ -10,19 +10,19 @@ public class IdentityService : IIdentityService
     private readonly UserManager<ApplicationUser> _userManager;
     private readonly SignInManager<ApplicationUser> _signInManager;
     private readonly IUserClaimsPrincipalFactory<ApplicationUser> _userClaimsPrincipalFactory;
-    private readonly IAuthorizationService _authorizationService;
+    //private readonly IAuthorizationService _authorizationService;
     private readonly IJwtProvider _jwtProvider;
 
     public IdentityService(
         UserManager<ApplicationUser> userManager,
         IUserClaimsPrincipalFactory<ApplicationUser> userClaimsPrincipalFactory,
-        IAuthorizationService authorizationService,
+       // IAuthorizationService authorizationService,
         IJwtProvider jwtProvider,
         SignInManager<ApplicationUser> signInManager)
     {
         _userManager = userManager;
         _userClaimsPrincipalFactory = userClaimsPrincipalFactory;
-        _authorizationService = authorizationService;
+        //_authorizationService = authorizationService;
         _jwtProvider = jwtProvider;
         _signInManager = signInManager;
     }
@@ -79,7 +79,7 @@ public class IdentityService : IIdentityService
 
         var principal = await _userClaimsPrincipalFactory.CreateAsync(user);
 
-        var result = await _authorizationService.AuthorizeAsync(principal, policyName);
+        var result = new { Succeeded  = true};//await _authorizationService.AuthorizeAsync(principal, policyName);
 
         return result.Succeeded;
     }

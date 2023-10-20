@@ -6,7 +6,7 @@ using MediatR;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Options;
 
-namespace HomeEducation.Application.TodoItems.Queries.GetTodoItemsWithPagination;
+namespace HomeEducation.Application.Levels.Quesries;
 public record GetLevelsQuery : IRequest<GetLevelsDto>
 {
    

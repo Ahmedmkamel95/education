@@ -65,7 +65,7 @@ public class CreateUserCommandHandler : IRequestHandler<UserManagementCommand, R
             Email = userRequest.Email,
             PhoneNumber = userRequest.PhoneNumber,
             UserType = command.UserType,
-            IsActive = true
+            IsActive = false
         };
 
         try

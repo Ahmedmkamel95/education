@@ -20,6 +20,7 @@ public sealed class JwtProvider : IJwtProvider
         var claims = new Claim[] 
         {
             new (JwtRegisteredClaimNames.Sub, user.Id/*id*/),
+           // new (ClaimTypes.Role, user.role/*id*/),
             new (JwtRegisteredClaimNames.Email, user.Email/*email*/)
         };
         var siginingCredentials = new SigningCredentials(
@@ -32,7 +33,7 @@ public sealed class JwtProvider : IJwtProvider
             _jwtOptions.Audience,
             claims,
             null,
-            DateTime.UtcNow.AddHours(1),
+            DateTime.UtcNow.AddHours(4),
             siginingCredentials
             );
 
