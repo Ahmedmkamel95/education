@@ -1,12 +1,17 @@
-﻿using HomeEducation.Application.Common.Interfaces;
+﻿using System.Security.Claims;
+using System.Text;
+using HomeEducation.Application.Common.Interfaces;
+using HomeEducation.Domain.Enums;
 using HomeEducation.Infrastructure.Identity;
 using HomeEducation.Infrastructure.Persistence;
 using HomeEducation.Infrastructure.Persistence.Interceptors;
 using HomeEducation.Infrastructure.Services;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
+using WebApi.OptionsSetup;
 
 namespace Microsoft.Extensions.DependencyInjection;
 public static class ConfigureServices
@@ -15,45 +20,59 @@ public static class ConfigureServices
     {
         services.AddScoped<AuditableEntitySaveChangesInterceptor>();
 
-        /*if (configuration.GetValue<bool>("UseInMemoryDatabase"))
-        {
-            services.AddDbContext<ApplicationDbContext>(options =>
-                options.UseInMemoryDatabase("HomeEducationDb"));
-        }
-        else
-        {*/
-            services.AddDbContext<ApplicationDbContext>(options =>
-                options.UseSqlServer(configuration.GetConnectionString("DefaultConnection"),
-                    builder => builder.MigrationsAssembly(typeof(ApplicationDbContext).Assembly.FullName)));
-        //}
+        services.AddDbContext<ApplicationDbContext>(options =>
+            options.UseSqlServer(configuration.GetConnectionString("DefaultConnection"),
+                builder => builder.MigrationsAssembly(typeof(ApplicationDbContext).Assembly.FullName)));
 
         services.AddScoped<IApplicationDbContext>(provider => provider.GetRequiredService<ApplicationDbContext>());
 
         services.AddScoped<ApplicationDbContextInitialiser>();
 
-        services
-            .AddDefaultIdentity<ApplicationUser>()
-            .AddRoles<IdentityRole>()
-            .AddEntityFrameworkStores<ApplicationDbContext>();
 
-        services.AddIdentityServer()
-            .AddApiAuthorization<ApplicationUser, ApplicationDbContext>();
+        services.AddIdentity<ApplicationUser, IdentityRole>()
+                .AddEntityFrameworkStores<ApplicationDbContext>()
+                .AddDefaultTokenProviders();
+
 
         services.AddTransient<IDateTime, DateTimeService>();
         services.AddTransient<IIdentityService, IdentityService>();
+        services.AddTransient<IJwtProvider, JwtProvider>();
+        services.AddTransient<JwtOptions>();
 
-        services.AddAuthentication("Bearer").AddJwtBearer("Bearer", options =>
+        services.AddAuthentication(options =>
         {
-            options.Authority = "https://localhost:44312";
-            options.TokenValidationParameters = new TokenValidationParameters
-            {
-                ValidateAudience = false
-            };
-        });//.AddIdentityServerJwt();
+            options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+            options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
+        })
+           .AddJwtBearer(options =>
+           {
+               options.Events = new JwtBearerEvents
+               {
+                   OnAuthenticationFailed = async ctx =>
+                   {
+                       var exceptionMessage = ctx.Exception;
+                   },
+               };
+               options.SaveToken = true;
+               options.RequireHttpsMetadata = false;
+               options.TokenValidationParameters = new TokenValidationParameters()
+               {
+                   ValidateIssuer = true,
+                   ValidateAudience = true,
+                   ValidateLifetime = true,
+                   ValidateIssuerSigningKey = true,
+                   ValidIssuer = configuration.GetValue<string>("jwt:Issuer"),
+                   ValidAudience = configuration.GetValue<string>("jwt:Audience"),
+                   IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration.GetValue<string>("jwt:SecretKey")))
+               };
+           });
 
-        services.AddAuthorization(options =>
-            options.AddPolicy("CanPurge", policy => policy.RequireRole("Administrator")));
+        services.AddAuthorization();
 
+        services.ConfigureOptions<JwtOptionsSetup>();
+        //services.ConfigureOptions<JwtBearerOptionsSetup>();
+        //services.ConfigureOptions<AuthorizationOptionsSetup>();
         return services;
     }
 }

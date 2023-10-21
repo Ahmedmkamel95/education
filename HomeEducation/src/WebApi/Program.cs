@@ -5,10 +5,9 @@ using Microsoft.Extensions.Options;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-builder.Services.AddApplicationServices();
 builder.Services.AddInfrastructureServices(builder.Configuration);
-builder.Services.AddWebApiServices();
-
+builder.Services.AddWebApiServices(builder.Configuration);
+builder.Services.AddApplicationServices();
 builder.Services.Configure<RequestLocalizationOptions>(options =>
 {
     options.RequestCultureProviders.Clear();
@@ -54,17 +53,14 @@ app.UseSwaggerUi3(settings =>
     settings.DocumentPath = "/api/specification.json";
 });
 
-app.UseRouting();
-
 app.UseAuthentication();
-app.UseIdentityServer();
+app.UseRouting();
 app.UseAuthorization();
+
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller}/{action=Index}/{id?}");
 
-app.MapRazorPages();
 
 app.MapFallbackToFile("index.html");
-
 app.Run();

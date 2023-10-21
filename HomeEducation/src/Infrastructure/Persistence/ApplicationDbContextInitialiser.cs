@@ -1,4 +1,6 @@
-﻿using HomeEducation.Infrastructure.Identity;
+﻿using HomeEducation.Domain.Constants;
+using HomeEducation.Domain.Entities;
+using HomeEducation.Infrastructure.Identity;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
@@ -50,16 +52,30 @@ public class ApplicationDbContextInitialiser
 
     public async Task TrySeedAsync()
     {
-        // Default roles
-        var administratorRole = new IdentityRole("Administrator");
+        //Seed Default roles
+        await SeedRoles();
+        //Seed Default users
+        await SeedAdminUser();
+    }
 
-        if (_roleManager.Roles.All(r => r.Name != administratorRole.Name))
+    private async Task SeedRoles() {
+        var roleProperities = typeof(Role).GetProperties();
+
+        foreach(var role in roleProperities)
         {
-            await _roleManager.CreateAsync(administratorRole);
+            var roleName = role.GetValue(typeof(Role)).ToString();
+            var userRole = new IdentityRole(roleName);
+            if (_roleManager.Roles.All(r => r.Name != userRole.Name))
+            {
+                await _roleManager.CreateAsync(userRole);
+            }
         }
+    }
+    private async Task SeedAdminUser() 
+    {
+       var administratorRole = _roleManager.Roles.FirstOrDefault(x => x.Name == Role.Admin);
 
-        // Default users
-        var administrator = new ApplicationUser { UserName = "administrator@localhost", Email = "administrator@localhost" };
+        var administrator = new ApplicationUser { UserName = "administrator", Email = "administrator@homeEducation" };
 
         if (_userManager.Users.All(u => u.UserName != administrator.UserName))
         {
@@ -69,9 +85,19 @@ public class ApplicationDbContextInitialiser
                 await _userManager.AddToRolesAsync(administrator, new[] { administratorRole.Name });
             }
         }
-
-        // Default data
-        // Seed, if necessary
-
+        if (_context.Users.All(u => u.Email != administrator.Email))
+        {
+            User user = new User()
+            {
+                Email = "administrator@homeEducation",
+                Id = Guid.NewGuid().ToString(),
+                FirstName = "administrator",
+                LastName = "administrator",
+                UserType = Role.Admin,
+                PhoneNumber = "01241564864"
+            };
+            await _context.AddAsync(user);
+            await _context.SaveChangesAsync();
+        }
     }
 }

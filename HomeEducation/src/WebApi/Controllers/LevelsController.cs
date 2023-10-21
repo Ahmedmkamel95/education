@@ -1,17 +1,19 @@
-﻿using HomeEducation.Application.Queries.GetLevels;
-using HomeEducation.Application.TodoItems.Queries.GetTodoItemsWithPagination;
+﻿using HomeEducation.Application.Levels.Quesries;
+using HomeEducation.Domain.Constants;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Options;
 
 namespace HomeEducation.WebApi.Controllers;
+
 public class LevelsController : ApiControllerBase
 {
 
-    public LevelsController () {  }
+    public LevelsController() { }
 
+    [Authorize(Roles = $"{Role.Admin},{Role.Teacher}")]
     [HttpGet]
-    public async Task<ActionResult<GetLevelsDto>> GetLevels()
+    public async Task<IActionResult> GetLevels()
     {
-        return await Mediator.Send(new GetLevelsQuery());
+        return Ok(await Mediator.Send(new GetLevelsQuery()));
     }
 }

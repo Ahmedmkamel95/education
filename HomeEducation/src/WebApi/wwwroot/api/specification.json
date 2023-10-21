@@ -16,14 +16,23 @@
           "200": {
             "description": "",
             "content": {
-              "application/json": {
+              "application/octet-stream": {
                 "schema": {
-                  "$ref": "#/components/schemas/GetLevelsDto"
+                  "type": "string",
+                  "format": "binary"
                 }
               }
             }
           }
-        }
+        },
+        "security": [
+          {
+            "JWT": [
+              "Admin",
+              "Teacher"
+            ]
+          }
+        ]
       }
     },
     "/api/WeatherForecast": {
@@ -48,46 +57,83 @@
           }
         }
       }
+    },
+    "/createTeacher": {
+      "post": {
+        "tags": [
+          "Admin"
+        ],
+        "operationId": "Admin_CreateTeacherUser",
+        "requestBody": {
+          "x-name": "addTeacherRequest",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AddTeacherRequestDto"
+              }
+            }
+          },
+          "required": true,
+          "x-position": 1
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/octet-stream": {
+                "schema": {
+                  "type": "string",
+                  "format": "binary"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "JWT": [
+              "Admin"
+            ]
+          }
+        ]
+      }
+    },
+    "/identity/login": {
+      "post": {
+        "tags": [
+          "UserManagement"
+        ],
+        "operationId": "UserManagement_LoginUser",
+        "requestBody": {
+          "x-name": "loginRequest",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/LoginRequestDto"
+              }
+            }
+          },
+          "required": true,
+          "x-position": 1
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/octet-stream": {
+                "schema": {
+                  "type": "string",
+                  "format": "binary"
+                }
+              }
+            }
+          }
+        }
+      }
     }
   },
   "components": {
     "schemas": {
-      "GetLevelsDto": {
-        "type": "object",
-        "additionalProperties": false,
-        "properties": {
-          "primary": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/PhaseGradeDto"
-            }
-          },
-          "preparatory": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/PhaseGradeDto"
-            }
-          },
-          "secondary": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/PhaseGradeDto"
-            }
-          }
-        }
-      },
-      "PhaseGradeDto": {
-        "type": "object",
-        "additionalProperties": false,
-        "properties": {
-          "levelId": {
-            "type": "string"
-          },
-          "title": {
-            "type": "string"
-          }
-        }
-      },
       "WeatherForecast": {
         "type": "object",
         "additionalProperties": false,
@@ -107,6 +153,74 @@
           "summary": {
             "type": "string",
             "nullable": true
+          }
+        }
+      },
+      "AddTeacherRequestDto": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/AddUserRequestDto"
+          },
+          {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "courseIds": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "levelIds": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        ]
+      },
+      "AddUserRequestDto": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "userName": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string"
+          },
+          "password": {
+            "type": "string"
+          },
+          "phoneNumber": {
+            "type": "string"
+          },
+          "firstName": {
+            "type": "string"
+          },
+          "lastName": {
+            "type": "string"
+          }
+        }
+      },
+      "LoginRequestDto": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "email",
+          "password"
+        ],
+        "properties": {
+          "email": {
+            "type": "string",
+            "format": "email",
+            "minLength": 1
+          },
+          "password": {
+            "type": "string",
+            "minLength": 1
           }
         }
       }

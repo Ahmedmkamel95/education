@@ -4,10 +4,10 @@ using Microsoft.AspNetCore.Identity;
 namespace HomeEducation.Infrastructure.Identity;
 public static class IdentityResultExtensions
 {
-    public static Result ToApplicationResult(this IdentityResult result)
+    public static Result<string> ToApplicationResult(this IdentityResult result)
     {
         return result.Succeeded
-            ? Result.Success()
-            : Result.Failure(result.Errors.Select(e => e.Description));
+            ? Result<string>.Success(null)
+            : Result<string>.Failure(result.Errors.Select(e => e.Description).ToArray());
     }
 }

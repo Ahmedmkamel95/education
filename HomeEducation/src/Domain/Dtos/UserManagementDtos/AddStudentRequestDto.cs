@@ -1,0 +1,12 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace HomeEducation.Domain.Dtos.UserManagementDtos;
+public class AddStudentRequestDto : AddUserRequestDto
+{
+    public string CourseId { get; set; }
+    public string LevelId { get; set; }
+}
