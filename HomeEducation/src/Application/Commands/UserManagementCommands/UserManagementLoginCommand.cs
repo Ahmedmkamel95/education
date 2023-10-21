@@ -17,10 +17,10 @@ public record UserManagementLoginCommand : IRequest<Result<string>>
 
 public class LoginUserCommandHandler : IRequestHandler<UserManagementLoginCommand, Result<string>>
 {
-    private readonly IApplicationDbContext _context;
+    private readonly IHomeEducationDbContext _context;
     private readonly IIdentityService _identityService;
 
-    public LoginUserCommandHandler(IApplicationDbContext context, IIdentityService identityService)
+    public LoginUserCommandHandler(IHomeEducationDbContext context, IIdentityService identityService)
     {
         _context = context;
         _identityService = identityService;

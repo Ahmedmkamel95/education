@@ -14,11 +14,11 @@ public record GetLevelsQuery : IRequest<GetLevelsDto>
 
 public class GetLevelsQueryHandler : IRequestHandler<GetLevelsQuery, GetLevelsDto>
 {
-    private readonly IApplicationDbContext _context;
+    private readonly IHomeEducationDbContext _context;
     private readonly IMapper _mapper;
     private readonly IOptions<RequestLocalizationOptions> _options;
 
-    public GetLevelsQueryHandler(IApplicationDbContext context, IMapper mapper, IOptions<RequestLocalizationOptions> options)
+    public GetLevelsQueryHandler(IHomeEducationDbContext context, IMapper mapper, IOptions<RequestLocalizationOptions> options)
     {
         _context = context;
         _mapper = mapper;

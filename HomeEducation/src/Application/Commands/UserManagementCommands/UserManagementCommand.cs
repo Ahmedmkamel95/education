@@ -21,10 +21,10 @@ public record UserManagementCommand : IRequest<Result<string>>
 
 public class CreateUserCommandHandler : IRequestHandler<UserManagementCommand, Result<string>>
 {
-    private readonly IApplicationDbContext _context;
+    private readonly IHomeEducationDbContext _context;
     private readonly IIdentityService _identityService;
     private readonly ILogger<CreateUserCommandHandler> _logger;
-    public CreateUserCommandHandler(IApplicationDbContext context, IIdentityService identityService, ILogger<CreateUserCommandHandler> logger)
+    public CreateUserCommandHandler(IHomeEducationDbContext context, IIdentityService identityService, ILogger<CreateUserCommandHandler> logger)
     {
         _context = context;
         _identityService = identityService;
