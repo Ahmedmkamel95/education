@@ -10,13 +10,13 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 
 namespace HomeEducation.Infrastructure.Persistence;
-public class ApplicationDbContext : IdentityDbContext<ApplicationUser>, IApplicationDbContext
+public class HomeEducationDbContext : DbContext , IHomeEducationDbContext
 {
     private readonly IMediator _mediator;
     private readonly AuditableEntitySaveChangesInterceptor _auditableEntitySaveChangesInterceptor;
 
-    public ApplicationDbContext(
-        DbContextOptions<ApplicationDbContext> options,
+    public HomeEducationDbContext(
+        DbContextOptions<HomeEducationDbContext> options,
         IMediator mediator,
         AuditableEntitySaveChangesInterceptor auditableEntitySaveChangesInterceptor)
         : base(options)
@@ -25,10 +25,12 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>, IApplica
         _auditableEntitySaveChangesInterceptor = auditableEntitySaveChangesInterceptor;
     }
 
+    public DbSet<Level> Levels => Set<Level>();
+    public DbSet<User> Users => Set<User>();
+
     protected override void OnModelCreating(ModelBuilder builder)
     {
         builder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
-        
         base.OnModelCreating(builder);
     }
 

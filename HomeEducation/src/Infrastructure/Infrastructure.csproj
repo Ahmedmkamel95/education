@@ -9,6 +9,12 @@
     </PropertyGroup>
 
     <ItemGroup>
+      <Compile Remove="Persistence\Configurations\**" />
+      <EmbeddedResource Remove="Persistence\Configurations\**" />
+      <None Remove="Persistence\Configurations\**" />
+    </ItemGroup>
+
+    <ItemGroup>
         <PackageReference Include="AutoMapper" Version="12.0.1" />
         <PackageReference Include="CsvHelper" Version="30.0.1" />
         <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="7.0.12" />
@@ -19,9 +25,8 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="Data\Configuration\" />
       <Folder Include="Files\Maps\" />
-      <Folder Include="Persistence\Configurations\" />
+      <Folder Include="Migrations\" />
     </ItemGroup>
 
     <ItemGroup>

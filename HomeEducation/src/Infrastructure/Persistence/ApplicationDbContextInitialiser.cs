@@ -1,4 +1,6 @@
-﻿using HomeEducation.Domain.Constants;
+﻿using HomeEducation.Application.Common.Interfaces;
+using HomeEducation.Application.Common.Models;
+using HomeEducation.Domain.Constants;
 using HomeEducation.Domain.Entities;
 using HomeEducation.Infrastructure.Identity;
 using Microsoft.AspNetCore.Identity;
@@ -9,25 +11,29 @@ namespace HomeEducation.Infrastructure.Persistence;
 public class ApplicationDbContextInitialiser
 {
     private readonly ILogger<ApplicationDbContextInitialiser> _logger;
-    private readonly ApplicationDbContext _context;
+    private readonly ApplicationDbContext _appContext;
+    private readonly HomeEducationDbContext _homeEducationContext;
     private readonly UserManager<ApplicationUser> _userManager;
     private readonly RoleManager<IdentityRole> _roleManager;
-
-    public ApplicationDbContextInitialiser(ILogger<ApplicationDbContextInitialiser> logger, ApplicationDbContext context, UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager)
+    private readonly IIdentityService _identityService;
+    public ApplicationDbContextInitialiser(ILogger<ApplicationDbContextInitialiser> logger, ApplicationDbContext appContext, UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager, HomeEducationDbContext homeEducationContext, IIdentityService identityService)
     {
         _logger = logger;
-        _context = context;
+        _appContext = appContext;
         _userManager = userManager;
         _roleManager = roleManager;
+        _homeEducationContext = homeEducationContext;
+        _identityService = identityService;
     }
 
     public async Task InitialiseAsync()
     {
         try
         {
-            if (_context.Database.IsSqlServer())
+            if (_homeEducationContext.Database.IsSqlServer() && _appContext.Database.IsSqlServer())
             {
-                await _context.Database.MigrateAsync();
+                await _appContext.Database.MigrateAsync();
+                await _homeEducationContext.Database.MigrateAsync();
             }
         }
         catch (Exception ex)
@@ -59,7 +65,8 @@ public class ApplicationDbContextInitialiser
     }
 
     private async Task SeedRoles() {
-        var roleProperities = typeof(Role).GetProperties();
+        var type = typeof(Role);
+        var roleProperities = type.GetFields();
 
         foreach(var role in roleProperities)
         {
@@ -76,28 +83,28 @@ public class ApplicationDbContextInitialiser
        var administratorRole = _roleManager.Roles.FirstOrDefault(x => x.Name == Role.Admin);
 
         var administrator = new ApplicationUser { UserName = "administrator", Email = "administrator@homeEducation" };
-
+        
         if (_userManager.Users.All(u => u.UserName != administrator.UserName))
         {
-            await _userManager.CreateAsync(administrator, "Administrator1!");
+           await _userManager.CreateAsync(administrator, "Administrator1!");
             if (!string.IsNullOrWhiteSpace(administratorRole.Name))
             {
                 await _userManager.AddToRolesAsync(administrator, new[] { administratorRole.Name });
             }
         }
-        if (_context.Users.All(u => u.Email != administrator.Email))
+        if (_homeEducationContext.Users.All(u => u.Email != administrator.Email))
         {
             User user = new User()
             {
                 Email = "administrator@homeEducation",
-                Id = Guid.NewGuid().ToString(),
+                Id = administrator.Id,
                 FirstName = "administrator",
                 LastName = "administrator",
                 UserType = Role.Admin,
                 PhoneNumber = "01241564864"
             };
-            await _context.AddAsync(user);
-            await _context.SaveChangesAsync();
+            await _homeEducationContext.AddAsync(user);
+            await _homeEducationContext.SaveChangesAsync();
         }
     }
 }

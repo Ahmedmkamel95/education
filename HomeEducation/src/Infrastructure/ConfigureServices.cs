@@ -24,7 +24,12 @@ public static class ConfigureServices
             options.UseSqlServer(configuration.GetConnectionString("DefaultConnection"),
                 builder => builder.MigrationsAssembly(typeof(ApplicationDbContext).Assembly.FullName)));
 
+        services.AddDbContext<HomeEducationDbContext>(options =>
+            options.UseSqlServer(configuration.GetConnectionString("DefaultConnection"),
+                builder => builder.MigrationsAssembly(typeof(HomeEducationDbContext).Assembly.FullName)));
+
         services.AddScoped<IApplicationDbContext>(provider => provider.GetRequiredService<ApplicationDbContext>());
+        services.AddScoped<IHomeEducationDbContext>(provider => provider.GetRequiredService<HomeEducationDbContext>());
 
         services.AddScoped<ApplicationDbContextInitialiser>();
 
