@@ -1,4 +1,5 @@
 ﻿using HomeEducation.Infrastructure.Identity;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Options;
 
 namespace WebApi.OptionsSetup;

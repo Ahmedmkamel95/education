@@ -1,22 +1,22 @@
 ﻿using HomeEducation.Application.Common.Interfaces;
 using HomeEducation.Application.Common.Models;
+using HomeEducation.Domain.Constants;
 using HomeEducation.Domain.Dtos.UserManagementDtos;
 using HomeEducation.Domain.Entities;
-using HomeEducation.Domain.Enums;
 using MediatR;
 using Microsoft.Extensions.Logging;
 
 namespace HomeEducation.Application.Commands.UserManagementCommands;
 public record UserManagementCommand : IRequest<Result<string>>
 {
-    public UserManagementCommand(IUserRequest request, ApplicationUserTypes userType)
+    public UserManagementCommand(IUserRequest request, string userType)
     {
         this.Request = request;
         this.UserType = userType;
     }
 
     public IUserRequest Request {  get; set; }
-    public ApplicationUserTypes UserType {  get; set; }
+    public string UserType {  get; set; }
 }
 
 public class CreateUserCommandHandler : IRequestHandler<UserManagementCommand, Result<string>>
@@ -33,15 +33,16 @@ public class CreateUserCommandHandler : IRequestHandler<UserManagementCommand, R
     public async Task<Result<string>> Handle(UserManagementCommand command, CancellationToken cancellationToken)
     {
         IUserRequest userRequest = null;
+        
         switch (command.UserType)
         {
-            case ApplicationUserTypes.Admin:
+            case Role.Admin:
                 userRequest = command.Request as AddUserRequestDto;
                 break;
-            case ApplicationUserTypes.Teacher:
+            case Role.Teacher:
                 userRequest = command.Request as AddTeacherRequestDto;
                 break;
-            case ApplicationUserTypes.Student:
+            case Role.Student:
                 userRequest = command.Request as AddStudentRequestDto;
                 break;
         }

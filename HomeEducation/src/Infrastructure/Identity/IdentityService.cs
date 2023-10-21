@@ -1,5 +1,6 @@
 ﻿using HomeEducation.Application.Common.Interfaces;
 using HomeEducation.Application.Common.Models;
+using HomeEducation.Domain.Enums;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -46,7 +47,7 @@ public class IdentityService : IIdentityService
 
         return (result.ToApplicationResult(), user.Id);
     }
-    public async Task<Result<string>> AuthenticateUserAsync(string email, string password)
+    public async Task<Result<string>> AuthenticateUserAsync(string email, string password, string userRole)
     {
         bool isAuthenticated = false;
         var user = await _userManager.FindByEmailAsync(email);
@@ -57,7 +58,7 @@ public class IdentityService : IIdentityService
         {
             return Result<string>.Failure(new string[] { "Authentication Faild"});
         }
-        var token = _jwtProvider.GenerateJwtToken(user);
+        var token = _jwtProvider.GenerateJwtToken(user, userRole);
         return Result<string>.Success(token);
     }
 

@@ -15,13 +15,13 @@ public sealed class JwtProvider : IJwtProvider
         _jwtOptions = jwtOptions.Value;
     }
 
-    public string GenerateJwtToken(ApplicationUser user)
+    public string GenerateJwtToken(ApplicationUser user, string userRole)
     {
         var claims = new Claim[] 
         {
-            new (JwtRegisteredClaimNames.Sub, user.Id/*id*/),
-           // new (ClaimTypes.Role, user.role/*id*/),
-            new (JwtRegisteredClaimNames.Email, user.Email/*email*/)
+            new (JwtRegisteredClaimNames.Sub, user.Id),
+            new (ClaimTypes.Role, userRole),
+            new (JwtRegisteredClaimNames.Email, user.Email)
         };
         var siginingCredentials = new SigningCredentials(
                 new SymmetricSecurityKey(

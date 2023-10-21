@@ -32,7 +32,7 @@ public class LoginUserCommandHandler : IRequestHandler<UserManagementLoginComman
         {
             return Result<string>.Failure(new string[] { "Invalid Credentials: Wrong Email" });
         }
-        var token = await _identityService.AuthenticateUserAsync(applicationUser.Email, command.Request.Password);
+        var token = await _identityService.AuthenticateUserAsync(applicationUser.Email, command.Request.Password, applicationUser.UserType);
 
         return token;
     }

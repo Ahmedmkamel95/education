@@ -27,7 +27,10 @@
         },
         "security": [
           {
-            "JWT": []
+            "JWT": [
+              "Admin",
+              "Teacher"
+            ]
           }
         ]
       }
@@ -55,12 +58,12 @@
         }
       }
     },
-    "/createuser": {
+    "/createTeacher": {
       "post": {
         "tags": [
           "Admin"
         ],
-        "operationId": "Admin_CreateUser",
+        "operationId": "Admin_CreateTeacherUser",
         "requestBody": {
           "x-name": "addTeacherRequest",
           "content": {
@@ -85,40 +88,14 @@
               }
             }
           }
-        }
-      }
-    },
-    "/api/UserManagement": {
-      "post": {
-        "tags": [
-          "UserManagement"
-        ],
-        "operationId": "UserManagement_CreateUser",
-        "requestBody": {
-          "x-name": "signUpRequest",
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/AddUserRequestDto"
-              }
-            }
-          },
-          "required": true,
-          "x-position": 1
         },
-        "responses": {
-          "200": {
-            "description": "",
-            "content": {
-              "application/octet-stream": {
-                "schema": {
-                  "type": "string",
-                  "format": "binary"
-                }
-              }
-            }
+        "security": [
+          {
+            "JWT": [
+              "Admin"
+            ]
           }
-        }
+        ]
       }
     },
     "/identity/login": {

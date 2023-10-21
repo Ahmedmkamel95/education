@@ -19,6 +19,7 @@
     </ItemGroup>
 
     <ItemGroup>
+      <Folder Include="Data\Configuration\" />
       <Folder Include="Files\Maps\" />
       <Folder Include="Persistence\Configurations\" />
     </ItemGroup>

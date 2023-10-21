@@ -23,7 +23,7 @@ public class User : BaseAuditableEntity
     [StringLength(255)]
     public string PhoneNumber { get; set; }
 
-    public ApplicationUserTypes UserType { get; set; }
+    public string UserType { get; set; }
     
     public bool IsActive { get; set; }
 

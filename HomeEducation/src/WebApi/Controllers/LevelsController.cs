@@ -1,6 +1,5 @@
 ﻿using HomeEducation.Application.Levels.Quesries;
-using HomeEducation.Application.Queries.GetLevels;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
+using HomeEducation.Domain.Constants;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -11,7 +10,7 @@ public class LevelsController : ApiControllerBase
 
     public LevelsController() { }
 
-    [Authorize]
+    [Authorize(Roles = $"{Role.Admin},{Role.Teacher}")]
     [HttpGet]
     public async Task<IActionResult> GetLevels()
     {

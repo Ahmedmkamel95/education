@@ -17,7 +17,6 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>, IApplica
 
     public ApplicationDbContext(
         DbContextOptions<ApplicationDbContext> options,
-        //IOptions<OperationalStoreOptions> operationalStoreOptions,
         IMediator mediator,
         AuditableEntitySaveChangesInterceptor auditableEntitySaveChangesInterceptor)
         : base(options)

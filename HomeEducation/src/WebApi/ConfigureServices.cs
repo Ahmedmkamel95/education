@@ -1,5 +1,7 @@
-﻿using System.Text;
+﻿using System.Security.Claims;
+using System.Text;
 using HomeEducation.Application.Common.Interfaces;
+using HomeEducation.Infrastructure.Identity;
 using HomeEducation.Infrastructure.Persistence;
 using HomeEducation.WebApi.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -26,6 +28,7 @@ public static class ConfigureServices
         services.AddHealthChecks()
             .AddDbContextCheck<ApplicationDbContext>();
 
+        services.AddControllers();
 
         services.AddScoped<FluentValidationSchemaProcessor>(provider =>
         {
@@ -58,40 +61,7 @@ public static class ConfigureServices
             configure.OperationProcessors.Add(new AspNetCoreOperationSecurityScopeProcessor("JWT"));
         });
 
-        services.AddAuthentication(options =>
-        {
-            options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-            options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-            options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
-        })
-            .AddJwtBearer(options =>
-            {
-                options.Events = new JwtBearerEvents
-                {
-                    OnAuthenticationFailed = async ctx =>
-                     {
-                         var exceptionMessage = ctx.Exception;
-                     },
-                };
-                options.SaveToken = true;
-                options.RequireHttpsMetadata = false;
-                options.TokenValidationParameters = new TokenValidationParameters()
-                {
-                    ValidateIssuer = true,
-                    ValidateAudience = true,
-                    ValidateLifetime = true,
-                    ValidateIssuerSigningKey = true,
-                    ValidIssuer = configuration.GetValue<string>("jwt:Issuer"),
-                    ValidAudience = configuration.GetValue<string>("jwt:Audience"),
-                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration.GetValue<string>("jwt:SecretKey")))
-                };
-            });
-        services.AddControllers();
-
-        services.AddAuthorization();
-
-        services.ConfigureOptions<JwtOptionsSetup>();
-        /*services.ConfigureOptions<JwtBearerOptionsSetup>();*/
+        
         return services;
     }
 }
