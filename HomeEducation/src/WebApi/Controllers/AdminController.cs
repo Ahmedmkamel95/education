@@ -1,5 +1,6 @@
 ﻿using HomeEducation.Application.Commands.AdminCommands;
 using HomeEducation.Application.Commands.UserManagementCommands;
+using HomeEducation.Application.Levels.Quesries;
 using HomeEducation.Domain.Constants;
 using HomeEducation.Domain.Dtos.UserManagementDtos;
 using HomeEducation.WebApi.Controllers;
@@ -32,5 +33,12 @@ public class AdminController : ApiControllerBase
             return BadRequest(result);
 
         return Created("", result);
+    }
+
+    [Route("getAllTeachers")]
+    [HttpGet]
+    public async Task<IActionResult> GetAllTeachers()
+    {
+        return Ok(await Mediator.Send(new GetTeachersQuery()));
     }
 }
