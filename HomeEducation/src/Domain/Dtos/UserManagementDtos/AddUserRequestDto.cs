@@ -14,5 +14,5 @@ public class AddUserRequestDto : IUserRequest
     public string PhoneNumber { get; set; }
     public string FirstName { set; get; }
     public string LastName { set; get; }
-
+    public string Image { get ; set; }
 }

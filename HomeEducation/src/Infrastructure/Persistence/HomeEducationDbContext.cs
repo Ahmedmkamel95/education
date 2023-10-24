@@ -26,7 +26,13 @@ public class HomeEducationDbContext : DbContext , IHomeEducationDbContext
     }
 
     public DbSet<Level> Levels => Set<Level>();
-    public DbSet<User> Users => Set<User>();
+    public DbSet<Admin> Admins => Set<Admin>();
+    public DbSet<Teacher> Teachers => Set<Teacher>();
+    public DbSet<Student> Students => Set<Student>();
+    public DbSet<Course> Courses => Set<Course>();
+    public DbSet<TeacherLevel> TeacherLevels => Set<TeacherLevel>();
+    public DbSet<TeacherStudent> TeacherStudents => Set<TeacherStudent>();
+    public DbSet<StudentCourseEnrollment> StudentCourseEnrollments=> Set<StudentCourseEnrollment>();
 
     protected override void OnModelCreating(ModelBuilder builder)
     {

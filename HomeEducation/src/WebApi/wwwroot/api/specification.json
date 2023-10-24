@@ -58,7 +58,7 @@
         }
       }
     },
-    "/createTeacher": {
+    "/api/Admin/createTeacher": {
       "post": {
         "tags": [
           "Admin"
@@ -98,7 +98,47 @@
         ]
       }
     },
-    "/identity/login": {
+    "/api/Admin/createStudent": {
+      "post": {
+        "tags": [
+          "Admin"
+        ],
+        "operationId": "Admin_CreateStudentUser",
+        "requestBody": {
+          "x-name": "addStudentRequest",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AddStudentRequestDto"
+              }
+            }
+          },
+          "required": true,
+          "x-position": 1
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/octet-stream": {
+                "schema": {
+                  "type": "string",
+                  "format": "binary"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "JWT": [
+              "Admin"
+            ]
+          }
+        ]
+      }
+    },
+    "/api/identity/login": {
       "post": {
         "tags": [
           "UserManagement"
@@ -202,8 +242,39 @@
           },
           "lastName": {
             "type": "string"
+          },
+          "image": {
+            "type": "string"
           }
         }
+      },
+      "AddStudentRequestDto": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/AddUserRequestDto"
+          },
+          {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "courseId": {
+                "type": "string"
+              },
+              "levelId": {
+                "type": "string"
+              },
+              "firebaseToken": {
+                "type": "string"
+              },
+              "macAddresses": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        ]
       },
       "LoginRequestDto": {
         "type": "object",

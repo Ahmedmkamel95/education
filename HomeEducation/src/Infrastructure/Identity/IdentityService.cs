@@ -1,5 +1,6 @@
 ﻿using HomeEducation.Application.Common.Interfaces;
 using HomeEducation.Application.Common.Models;
+using HomeEducation.Domain.Constants;
 using HomeEducation.Domain.Enums;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -9,23 +10,20 @@ namespace HomeEducation.Infrastructure.Identity;
 public class IdentityService : IIdentityService
 {
     private readonly UserManager<ApplicationUser> _userManager;
-    private readonly SignInManager<ApplicationUser> _signInManager;
+    private readonly RoleManager<IdentityRole> _roleManager;
     private readonly IUserClaimsPrincipalFactory<ApplicationUser> _userClaimsPrincipalFactory;
-    //private readonly IAuthorizationService _authorizationService;
     private readonly IJwtProvider _jwtProvider;
 
     public IdentityService(
         UserManager<ApplicationUser> userManager,
         IUserClaimsPrincipalFactory<ApplicationUser> userClaimsPrincipalFactory,
-       // IAuthorizationService authorizationService,
         IJwtProvider jwtProvider,
-        SignInManager<ApplicationUser> signInManager)
+        RoleManager<IdentityRole> roleManager)
     {
         _userManager = userManager;
         _userClaimsPrincipalFactory = userClaimsPrincipalFactory;
-        //_authorizationService = authorizationService;
         _jwtProvider = jwtProvider;
-        _signInManager = signInManager;
+        _roleManager = roleManager;
     }
 
     public async Task<string?> GetUserNameAsync(string userId)
@@ -35,7 +33,7 @@ public class IdentityService : IIdentityService
         return user.UserName;
     }
 
-    public async Task<(Result<string> Result, string UserId)> CreateUserAsync(string userName, string password)
+    public async Task<(Result<string> Result, string UserId)> CreateUserAsync(string userName, string password, string role)
     {
         var user = new ApplicationUser
         {
@@ -44,21 +42,26 @@ public class IdentityService : IIdentityService
         };
 
         var result = await _userManager.CreateAsync(user, password);
+        var sysRole = _roleManager.Roles.FirstOrDefault(x => x.Name == role);
+        if (!string.IsNullOrWhiteSpace(sysRole.Name))
+        {
+            await _userManager.AddToRolesAsync(user, new[] { sysRole.Name });
+        }
 
         return (result.ToApplicationResult(), user.Id);
     }
-    public async Task<Result<string>> AuthenticateUserAsync(string email, string password, string userRole)
+    public async Task<Result<string>> AuthenticateUserAsync(string email, string password)
     {
         bool isAuthenticated = false;
         var user = await _userManager.FindByEmailAsync(email);
         if(user != null)
             isAuthenticated = await _userManager.CheckPasswordAsync(user, password);
-        //_signInManager.PasswordSignInAsync(user, password);
         if(!isAuthenticated)
         {
-            return Result<string>.Failure(new string[] { "Authentication Faild"});
+            return Result<string>.Failure(new string[] { "Authentication Faild, Wrong Credentials "});
         }
-        var token = _jwtProvider.GenerateJwtToken(user, userRole);
+        var userRole = await _userManager.GetRolesAsync(user);
+        var token = _jwtProvider.GenerateJwtToken(user, userRole.FirstOrDefault());
         return Result<string>.Success(token);
     }
 

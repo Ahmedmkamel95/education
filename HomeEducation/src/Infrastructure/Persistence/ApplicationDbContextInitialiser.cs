@@ -92,15 +92,14 @@ public class ApplicationDbContextInitialiser
                 await _userManager.AddToRolesAsync(administrator, new[] { administratorRole.Name });
             }
         }
-        if (_homeEducationContext.Users.All(u => u.Email != administrator.Email))
+        if (_homeEducationContext.Admins.All(u => u.Email != administrator.Email))
         {
-            User user = new User()
+            User user = new Admin()
             {
                 Email = "administrator@homeEducation",
                 Id = administrator.Id,
                 FirstName = "administrator",
                 LastName = "administrator",
-                UserType = Role.Admin,
                 PhoneNumber = "01241564864"
             };
             await _homeEducationContext.AddAsync(user);

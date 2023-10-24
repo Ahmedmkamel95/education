@@ -14,7 +14,7 @@ public class UserManagementController : ApiControllerBase
        
     }
 
-    [Route("/identity/login")]
+    [Route("/api/identity/login")]
     [AllowAnonymous]
     [HttpPost]
     public async Task<IActionResult> LoginUser([FromBody] LoginRequestDto loginRequest)

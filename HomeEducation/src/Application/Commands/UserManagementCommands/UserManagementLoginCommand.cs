@@ -27,13 +27,13 @@ public class LoginUserCommandHandler : IRequestHandler<UserManagementLoginComman
     }
     public async Task<Result<string>> Handle(UserManagementLoginCommand command, CancellationToken cancellationToken)
     {
-        var applicationUser = _context.Users.FirstOrDefault(x => x.Email == command.Request.Email);
+        /*var applicationUser = _context.Users.FirstOrDefault(x => x.Email == command.Request.Email);
         if(applicationUser == null)
         {
             return Result<string>.Failure(new string[] { "Invalid Credentials: Wrong Email" });
-        }
-        var token = await _identityService.AuthenticateUserAsync(applicationUser.Email, command.Request.Password, applicationUser.UserType);
+        }*/
+        var result = await _identityService.AuthenticateUserAsync(command.Request.Email, command.Request.Password);
 
-        return token;
+        return result;
     }
 }
