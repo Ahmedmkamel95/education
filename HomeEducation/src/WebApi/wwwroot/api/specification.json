@@ -6,6 +6,47 @@
     "version": "1.0.0"
   },
   "paths": {
+    "/api/Courses/createCourse": {
+      "post": {
+        "tags": [
+          "Courses"
+        ],
+        "operationId": "Courses_CreateCourse",
+        "requestBody": {
+          "x-name": "request",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateCourseRequestDto"
+              }
+            }
+          },
+          "required": true,
+          "x-position": 1
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/octet-stream": {
+                "schema": {
+                  "type": "string",
+                  "format": "binary"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "JWT": [
+              "Admin",
+              "Teacher"
+            ]
+          }
+        ]
+      }
+    },
     "/api/Levels": {
       "get": {
         "tags": [
@@ -174,6 +215,33 @@
   },
   "components": {
     "schemas": {
+      "CreateCourseRequestDto": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "titleAr": {
+            "type": "string"
+          },
+          "titleEn": {
+            "type": "string"
+          },
+          "descriptionAr": {
+            "type": "string"
+          },
+          "descriptionEn": {
+            "type": "string"
+          },
+          "levelId": {
+            "type": "string"
+          },
+          "teacherId": {
+            "type": "string"
+          },
+          "image": {
+            "type": "string"
+          }
+        }
+      },
       "WeatherForecast": {
         "type": "object",
         "additionalProperties": false,
@@ -225,9 +293,6 @@
         "type": "object",
         "additionalProperties": false,
         "properties": {
-          "userName": {
-            "type": "string"
-          },
           "email": {
             "type": "string"
           },
