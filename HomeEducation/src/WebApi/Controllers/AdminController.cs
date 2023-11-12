@@ -1,6 +1,8 @@
 ﻿using HomeEducation.Application.Commands.AdminCommands;
 using HomeEducation.Application.Commands.UserManagementCommands;
+using HomeEducation.Application.Common.Models;
 using HomeEducation.Application.Levels.Quesries;
+using HomeEducation.Application.Queries.Teachers;
 using HomeEducation.Domain.Constants;
 using HomeEducation.Domain.Dtos.UserManagementDtos;
 using HomeEducation.WebApi.Controllers;
@@ -14,6 +16,7 @@ namespace WebApi.Controllers;
 public class AdminController : ApiControllerBase
 {
     [Route("createTeacher")]
+    [Produces(typeof(Result<string>))]
     [HttpPost]
     public async Task<IActionResult> CreateTeacherUser([FromBody] AddTeacherRequestDto addTeacherRequest/*, IFormFile image*/)
     {
@@ -24,18 +27,8 @@ public class AdminController : ApiControllerBase
         return Created("", result);
     }
 
-    [Route("createStudent")]
-    [HttpPost]
-    public async Task<IActionResult> CreateStudentUser([FromBody] AddStudentRequestDto addStudentRequest)
-    {
-        var result = await Mediator.Send(new CreateStudentCommand(addStudentRequest));
-        if (!result.Succeeded)
-            return BadRequest(result);
-
-        return Created("", result);
-    }
-
     [Route("getAllTeachers")]
+    [Produces(typeof(Result<List<GetTeachersResponseDto>>))]
     [HttpGet]
     public async Task<IActionResult> GetAllTeachers()
     {

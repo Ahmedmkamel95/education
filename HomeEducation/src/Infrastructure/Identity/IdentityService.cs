@@ -32,8 +32,14 @@ public class IdentityService : IIdentityService
 
         return user.UserName;
     }
+    public async Task<string?> GetUserRole(string userId)
+    {
+        var user = await _userManager.Users.FirstAsync(u => u.Id == userId);
+        var userRole = await _userManager.GetRolesAsync(user);
 
-    public async Task<(Result<string> Result, string UserId)> CreateUserAsync(string userName, string password, string role)
+        return userRole?.FirstOrDefault();
+    }
+    public async Task<(Result<string> Result, string UserId, string Token)> CreateUserAsync(string userName, string password, string role)
     {
         var user = new ApplicationUser
         {
@@ -48,7 +54,13 @@ public class IdentityService : IIdentityService
             await _userManager.AddToRolesAsync(user, new[] { sysRole.Name });
         }
 
-        return (result.ToApplicationResult(), user.Id);
+        //create token for student
+        if(role == Role.Student)
+        {
+            var token = _jwtProvider.GenerateJwtToken(user, Role.Student);
+            return (result.ToApplicationResult(), user.Id, token);
+        }
+        return (result.ToApplicationResult(), user.Id, "");
     }
     public async Task<Result<string>> AuthenticateUserAsync(string email, string password)
     {

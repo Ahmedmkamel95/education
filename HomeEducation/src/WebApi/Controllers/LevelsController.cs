@@ -9,8 +9,8 @@ public class LevelsController : ApiControllerBase
 {
 
     public LevelsController() { }
-
-    [Authorize(Roles = $"{Role.Admin},{Role.Teacher}")]
+   
+    [AllowAnonymous]
     [HttpGet]
     public async Task<IActionResult> GetLevels()
     {

@@ -1,4 +1,5 @@
-﻿using HomeEducation.Application.Common.Interfaces;
+﻿using HomeEducation.Application.Commands.UserManagementCommands.Dtos;
+using HomeEducation.Application.Common.Interfaces;
 using HomeEducation.Application.Common.Models;
 using HomeEducation.Domain.Constants;
 using HomeEducation.Domain.Dtos.UserManagementDtos;
@@ -6,8 +7,8 @@ using HomeEducation.Domain.Entities;
 using MediatR;
 using Microsoft.Extensions.Logging;
 
-namespace HomeEducation.Application.Commands.AdminCommands;
-public record CreateStudentCommand : IRequest<Result<string>>
+namespace HomeEducation.Application.Commands.UserManagementCommands;
+public record CreateStudentCommand : IRequest<Result<CreateStudentResponseDto>>
 {
     public CreateStudentCommand(IUserRequest request)
     {
@@ -17,7 +18,7 @@ public record CreateStudentCommand : IRequest<Result<string>>
     public IUserRequest Request { get; set; }
 }
 
-public class CreateStudentCommandHandler : IRequestHandler<CreateStudentCommand, Result<string>>
+public class CreateStudentCommandHandler : IRequestHandler<CreateStudentCommand, Result<CreateStudentResponseDto>>
 {
     private readonly IHomeEducationDbContext _context;
     private readonly IIdentityService _identityService;
@@ -28,19 +29,19 @@ public class CreateStudentCommandHandler : IRequestHandler<CreateStudentCommand,
         _identityService = identityService;
         _logger = logger;
     }
-    public async Task<Result<string>> Handle(CreateStudentCommand command, CancellationToken cancellationToken)
+    public async Task<Result<CreateStudentResponseDto>> Handle(CreateStudentCommand command, CancellationToken cancellationToken)
     {
         var userRequest = command.Request as AddStudentRequestDto;
         var student = _context.Students.FirstOrDefault(x => x.Email == userRequest.Email);
         if (student != null)
         {
-            return Result<string>.Failure(new string[] { "User is already exists" });
+            return Result<CreateStudentResponseDto>.Failure(new string[] { "User is already exists" });
         }
 
         var createUserResult = await _identityService.CreateUserAsync(userRequest.Email, userRequest.Password, Role.Student);
         if (!createUserResult.Result.Succeeded)
         {
-            return createUserResult.Result;
+            return Result<CreateStudentResponseDto>.Failure(createUserResult.Result.Errors);
         }
         try
         {
@@ -56,16 +57,17 @@ public class CreateStudentCommandHandler : IRequestHandler<CreateStudentCommand,
                 MacAddress = string.Join('|', userRequest.MacAddresses),
                 LevelId = userRequest.LevelId
             };
-            
+
             if (!_context.Levels.Any(level => userRequest.LevelId == level.Id))
             {
                 _logger.LogError($"Faild to create user {student.Id}: {student.FirstName} {student.LastName}, Level is wrong ");
-                return Result<string>.Failure(new string[] { $"Faild to create user {student.Id}: {student.FirstName} {student.LastName}, Levels is wrong" });
+                return Result<CreateStudentResponseDto>.Failure(new string[] { $"Faild to create user {student.Id}: {student.FirstName} {student.LastName}, Levels is wrong" });
             }
 
             await _context.Students.AddAsync(student);
             var result = await _context.SaveChangesAsync(cancellationToken);
-            return Result<string>.Success("User created successfully");
+            var studentResponse = new CreateStudentResponseDto() { Student = student, Token = createUserResult.Token};
+            return Result<CreateStudentResponseDto>.Success(studentResponse);
 
         }
         catch (Exception ex)
@@ -74,7 +76,7 @@ public class CreateStudentCommandHandler : IRequestHandler<CreateStudentCommand,
             _logger.LogError(ex.Message);
 
             await _identityService.DeleteUserAsync(student.Id);
-            return Result<string>.Failure(new string[] { $"Faild to create user {student.Id}: {student.FirstName} {student.LastName} " });
+            return Result<CreateStudentResponseDto>.Failure(new string[] { $"Faild to create user {student.Id}: {student.FirstName} {student.LastName} " });
         }
     }
 }

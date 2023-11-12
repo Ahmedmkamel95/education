@@ -47,6 +47,44 @@
         ]
       }
     },
+    "/api/Courses/studentCourses": {
+      "get": {
+        "tags": [
+          "Courses"
+        ],
+        "operationId": "Courses_GetStudentCourses",
+        "parameters": [
+          {
+            "name": "studentId",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            },
+            "x-position": 1
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResultOfListOfStudentCourseResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "JWT": [
+              "Admin",
+              "Student"
+            ]
+          }
+        ]
+      }
+    },
     "/api/Levels": {
       "get": {
         "tags": [
@@ -65,15 +103,7 @@
               }
             }
           }
-        },
-        "security": [
-          {
-            "JWT": [
-              "Admin",
-              "Teacher"
-            ]
-          }
-        ]
+        }
       }
     },
     "/api/WeatherForecast": {
@@ -121,50 +151,9 @@
           "200": {
             "description": "",
             "content": {
-              "application/octet-stream": {
+              "application/json": {
                 "schema": {
-                  "type": "string",
-                  "format": "binary"
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "JWT": [
-              "Admin"
-            ]
-          }
-        ]
-      }
-    },
-    "/api/Admin/createStudent": {
-      "post": {
-        "tags": [
-          "Admin"
-        ],
-        "operationId": "Admin_CreateStudentUser",
-        "requestBody": {
-          "x-name": "addStudentRequest",
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/AddStudentRequestDto"
-              }
-            }
-          },
-          "required": true,
-          "x-position": 1
-        },
-        "responses": {
-          "200": {
-            "description": "",
-            "content": {
-              "application/octet-stream": {
-                "schema": {
-                  "type": "string",
-                  "format": "binary"
+                  "$ref": "#/components/schemas/ResultOfString"
                 }
               }
             }
@@ -189,10 +178,9 @@
           "200": {
             "description": "",
             "content": {
-              "application/octet-stream": {
+              "application/json": {
                 "schema": {
-                  "type": "string",
-                  "format": "binary"
+                  "$ref": "#/components/schemas/ResultOfListOfGetTeachersResponseDto"
                 }
               }
             }
@@ -207,7 +195,76 @@
         ]
       }
     },
-    "/api/identity/login": {
+    "/api/Student/createStudent": {
+      "post": {
+        "tags": [
+          "Student"
+        ],
+        "operationId": "Student_CreateStudentUser",
+        "requestBody": {
+          "x-name": "addStudentRequest",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AddStudentRequestDto"
+              }
+            }
+          },
+          "required": true,
+          "x-position": 1
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResultOfCreateStudentResponseDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/Student/subscribeToCourse": {
+      "post": {
+        "tags": [
+          "Student"
+        ],
+        "operationId": "Student_SubscribeToCourse",
+        "parameters": [
+          {
+            "name": "courseId",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            },
+            "x-position": 1
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResultOfString"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "JWT": [
+              "Student"
+            ]
+          }
+        ]
+      }
+    },
+    "/api/user/login": {
       "post": {
         "tags": [
           "UserManagement"
@@ -229,15 +286,43 @@
           "200": {
             "description": "",
             "content": {
-              "application/octet-stream": {
+              "application/json": {
                 "schema": {
-                  "type": "string",
-                  "format": "binary"
+                  "$ref": "#/components/schemas/ResultOfString"
                 }
               }
             }
           }
         }
+      }
+    },
+    "/api/user/profile": {
+      "get": {
+        "tags": [
+          "UserManagement"
+        ],
+        "operationId": "UserManagement_GetProfile",
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResultOfGetProfileResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "JWT": [
+              "Student",
+              " Teacher",
+              " Admin"
+            ]
+          }
+        ]
       }
     }
   },
@@ -270,6 +355,63 @@
           }
         }
       },
+      "ResultOfListOfStudentCourseResponseDto": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "succeeded": {
+            "type": "boolean"
+          },
+          "data": {
+            "type": "array",
+            "nullable": true,
+            "items": {
+              "nullable": true,
+              "oneOf": [
+                {
+                  "$ref": "#/components/schemas/StudentCourseResponseDto"
+                }
+              ]
+            }
+          },
+          "errors": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "StudentCourseResponseDto": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "title": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "levelId": {
+            "type": "string"
+          },
+          "levelTitle": {
+            "type": "string"
+          },
+          "teacherName": {
+            "type": "string"
+          },
+          "teacherId": {
+            "type": "string"
+          },
+          "image": {
+            "type": "string"
+          }
+        }
+      },
       "WeatherForecast": {
         "type": "object",
         "additionalProperties": false,
@@ -289,6 +431,25 @@
           "summary": {
             "type": "string",
             "nullable": true
+          }
+        }
+      },
+      "ResultOfString": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "succeeded": {
+            "type": "boolean"
+          },
+          "data": {
+            "type": "string",
+            "nullable": true
+          },
+          "errors": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
           }
         }
       },
@@ -341,6 +502,188 @@
           }
         }
       },
+      "ResultOfListOfGetTeachersResponseDto": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "succeeded": {
+            "type": "boolean"
+          },
+          "data": {
+            "type": "array",
+            "nullable": true,
+            "items": {
+              "nullable": true,
+              "oneOf": [
+                {
+                  "$ref": "#/components/schemas/GetTeachersResponseDto"
+                }
+              ]
+            }
+          },
+          "errors": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "GetTeachersResponseDto": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "firstName": {
+            "type": "string"
+          },
+          "lastName": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string"
+          },
+          "phoneNumber": {
+            "type": "string"
+          },
+          "isActive": {
+            "type": "boolean"
+          },
+          "imageUrl": {
+            "type": "string",
+            "nullable": true
+          }
+        }
+      },
+      "ResultOfCreateStudentResponseDto": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "succeeded": {
+            "type": "boolean"
+          },
+          "data": {
+            "nullable": true,
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/CreateStudentResponseDto"
+              }
+            ]
+          },
+          "errors": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "CreateStudentResponseDto": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "token": {
+            "type": "string"
+          },
+          "student": {
+            "$ref": "#/components/schemas/Student"
+          }
+        }
+      },
+      "Student": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/User"
+          },
+          {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "firebaseToken": {
+                "type": "string"
+              },
+              "macAddress": {
+                "type": "string"
+              },
+              "levelId": {
+                "type": "string",
+                "nullable": true
+              }
+            }
+          }
+        ]
+      },
+      "User": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/BaseAuditableEntity"
+          },
+          {
+            "type": "object",
+            "x-abstract": true,
+            "additionalProperties": false,
+            "properties": {
+              "firstName": {
+                "type": "string",
+                "maxLength": 255,
+                "minLength": 0
+              },
+              "lastName": {
+                "type": "string",
+                "maxLength": 255,
+                "minLength": 0
+              },
+              "email": {
+                "type": "string",
+                "format": "email",
+                "maxLength": 255,
+                "minLength": 0
+              },
+              "phoneNumber": {
+                "type": "string",
+                "format": "phone",
+                "maxLength": 255,
+                "minLength": 0
+              },
+              "isActive": {
+                "type": "boolean"
+              },
+              "imageUrl": {
+                "type": "string",
+                "nullable": true
+              }
+            }
+          }
+        ]
+      },
+      "BaseAuditableEntity": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/BaseEntity"
+          },
+          {
+            "type": "object",
+            "x-abstract": true,
+            "additionalProperties": false
+          }
+        ]
+      },
+      "BaseEntity": {
+        "type": "object",
+        "x-abstract": true,
+        "additionalProperties": false,
+        "required": [
+          "id"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "minLength": 1
+          }
+        }
+      },
       "AddStudentRequestDto": {
         "allOf": [
           {
@@ -385,6 +728,38 @@
           "password": {
             "type": "string",
             "minLength": 1
+          }
+        }
+      },
+      "ResultOfGetProfileResponseDto": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "succeeded": {
+            "type": "boolean"
+          },
+          "data": {
+            "nullable": true,
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/GetProfileResponseDto"
+              }
+            ]
+          },
+          "errors": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "GetProfileResponseDto": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "user": {
+            "$ref": "#/components/schemas/User"
           }
         }
       }

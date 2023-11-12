@@ -56,7 +56,7 @@ public class CreateCourseCommandHandler : IRequestHandler<CreateCourseCommand, R
 
             await _context.Courses.AddAsync(course);
             var result = await _context.SaveChangesAsync(cancellationToken);
-            return Result<string>.Success("User created successfully");
+            return Result<string>.Success("Course created successfully");
 
         }
         catch (Exception ex)

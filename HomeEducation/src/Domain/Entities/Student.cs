@@ -1,10 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 
 namespace HomeEducation.Domain.Entities;
 public class Student : User
@@ -15,8 +10,12 @@ public class Student : User
     [ForeignKey("Level")]
     public string? LevelId { get; set; }
 
+    [JsonIgnore]
     public Level Level { get; set; }
+
+    [JsonIgnore]
     public ICollection<TeacherStudent>? TeacherStudents { get; set; }
+    [JsonIgnore]
     public ICollection<StudentCourseEnrollment>? StudentCourseEnrollments{ get; set; }
 
 }
