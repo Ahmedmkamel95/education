@@ -52,7 +52,7 @@ public class CreateStudentCommandHandler : IRequestHandler<CreateStudentCommand,
                 LastName = userRequest.LastName,
                 Email = userRequest.Email,
                 PhoneNumber = userRequest.PhoneNumber,
-                IsActive = false,
+                IsActive = true,
                 FirebaseToken = userRequest.FirebaseToken,
                 MacAddress = string.Join('|', userRequest.MacAddresses),
                 LevelId = userRequest.LevelId

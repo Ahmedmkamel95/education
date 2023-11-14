@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 namespace HomeEducation.Domain.Dtos.UserManagementDtos;
 public class AddStudentRequestDto : AddUserRequestDto
 {
-    public string CourseId { get; set; }
+    public string? CourseId { get; set; }
     public string LevelId { get; set; }
     public string FirebaseToken { get; set; }
     public string[] MacAddresses { get; set; }

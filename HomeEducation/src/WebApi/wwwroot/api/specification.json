@@ -308,7 +308,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ResultOfGetProfileResponseDto"
+                  "$ref": "#/components/schemas/ResultOfUserProfileOfUser"
                 }
               }
             }
@@ -498,7 +498,8 @@
             "type": "string"
           },
           "image": {
-            "type": "string"
+            "type": "string",
+            "nullable": true
           }
         }
       },
@@ -694,7 +695,8 @@
             "additionalProperties": false,
             "properties": {
               "courseId": {
-                "type": "string"
+                "type": "string",
+                "nullable": true
               },
               "levelId": {
                 "type": "string"
@@ -731,7 +733,7 @@
           }
         }
       },
-      "ResultOfGetProfileResponseDto": {
+      "ResultOfUserProfileOfUser": {
         "type": "object",
         "additionalProperties": false,
         "properties": {
@@ -742,7 +744,7 @@
             "nullable": true,
             "oneOf": [
               {
-                "$ref": "#/components/schemas/GetProfileResponseDto"
+                "$ref": "#/components/schemas/UserProfileOfUser"
               }
             ]
           },
@@ -754,7 +756,7 @@
           }
         }
       },
-      "GetProfileResponseDto": {
+      "UserProfileOfUser": {
         "type": "object",
         "additionalProperties": false,
         "properties": {

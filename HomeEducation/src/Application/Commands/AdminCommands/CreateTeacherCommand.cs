@@ -44,7 +44,7 @@ public class CreateTeacherCommandHandler : IRequestHandler<CreateTeacherCommand,
                 LastName = userRequest.LastName,
                 Email = userRequest.Email,
                 PhoneNumber = userRequest.PhoneNumber,
-                IsActive = false,
+                IsActive = true,
             };
             var levels = _context.Levels.Where(level => userRequest.LevelIds.Contains(level.Id));
             if (!levels.Any())

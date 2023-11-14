@@ -13,13 +13,13 @@ public class GetLevelsDto
 
 public class PhaseGradeDto:IMapFrom<Level>
 {
-    public string LevelId { get; set; }
+    public string Id { get; set; }
     public string Title { get; set; }
 
     public void Mapping(Profile profile)
     {
         profile.CreateMap<Level, PhaseGradeDto>()
-            .ForMember(d => d.LevelId, opt => opt.MapFrom(s => s.Id))
+            .ForMember(d => d.Id, opt => opt.MapFrom(s => s.Id))
             .AfterMap((s,d,context) => d.Title = context.TryGetItems(out var Items) ? context.Items["culture"].ToString() == "ar" ? s.TitleAr : s.TitleEn : s.TitleEn);
     }
 }

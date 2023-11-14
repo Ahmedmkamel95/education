@@ -82,7 +82,7 @@ public class ApplicationDbContextInitialiser
     {
        var administratorRole = _roleManager.Roles.FirstOrDefault(x => x.Name == Role.Admin);
 
-        var administrator = new ApplicationUser { UserName = "administrator", Email = "administrator@homeEducation" };
+        var administrator = new ApplicationUser { UserName = "administrator2", Email = "administrator2@homeEducation" };
         
         if (_userManager.Users.All(u => u.UserName != administrator.UserName))
         {
@@ -96,11 +96,12 @@ public class ApplicationDbContextInitialiser
         {
             User user = new Admin()
             {
-                Email = "administrator@homeEducation",
+                Email = "administrator2@homeEducation",
                 Id = administrator.Id,
-                FirstName = "administrator",
+                FirstName = "administrator2",
                 LastName = "administrator",
-                PhoneNumber = "01241564864"
+                PhoneNumber = "01241564864",
+                IsActive = true
             };
             await _homeEducationContext.AddAsync(user);
             await _homeEducationContext.SaveChangesAsync();
