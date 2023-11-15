@@ -39,12 +39,13 @@ public class IdentityService : IIdentityService
 
         return userRole?.FirstOrDefault();
     }
-    public async Task<(Result<string> Result, string UserId, string Token)> CreateUserAsync(string userName, string password, string role)
+    public async Task<(Result<string> Result, string UserId, string Token)> CreateUserAsync(string userName, string password, string phoneNumber, string role)
     {
         var user = new ApplicationUser
         {
             UserName = userName,
             Email = userName,
+            PhoneNumber = phoneNumber
         };
 
         var result = await _userManager.CreateAsync(user, password);
@@ -71,6 +72,26 @@ public class IdentityService : IIdentityService
         if(!isAuthenticated)
         {
             return Result<string>.Failure(new string[] { "Authentication Faild, Wrong Credentials "});
+        }
+        var userRole = await _userManager.GetRolesAsync(user);
+        var token = _jwtProvider.GenerateJwtToken(user, userRole.FirstOrDefault());
+        return Result<string>.Success(token);
+    }
+
+    public async Task<Result<string>> AuthenticateStudentAsync(string email, string phoneNumber, string password)
+    {
+        bool isAuthenticated = false;
+
+        ApplicationUser user = null;
+        if (email != null)
+            user = await _userManager.FindByEmailAsync(email);
+        else if(phoneNumber != null)
+            user = await _userManager.Users.SingleOrDefaultAsync( x => x.PhoneNumber == phoneNumber);
+        if (user != null)
+            isAuthenticated = await _userManager.CheckPasswordAsync(user, password);
+        if (!isAuthenticated)
+        {
+            return Result<string>.Failure(new string[] { "Authentication Faild, Wrong Credentials " });
         }
         var userRole = await _userManager.GetRolesAsync(user);
         var token = _jwtProvider.GenerateJwtToken(user, userRole.FirstOrDefault());

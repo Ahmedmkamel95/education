@@ -37,7 +37,7 @@ public class CreateAdminCommandHandler : IRequestHandler<CreateAdminCommand, Res
             return Result<string>.Failure(new string[] { "Admin is already exists" });
         }
 
-        var createUserResult = await _identityService.CreateUserAsync(userRequest.Email, userRequest.Password, Role.Admin);
+        var createUserResult = await _identityService.CreateUserAsync(userRequest.Email, userRequest.Password, userRequest.PhoneNumber, Role.Admin);
         if (!createUserResult.Result.Succeeded)
         {
             return createUserResult.Result;

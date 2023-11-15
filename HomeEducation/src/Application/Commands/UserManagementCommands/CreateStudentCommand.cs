@@ -38,7 +38,7 @@ public class CreateStudentCommandHandler : IRequestHandler<CreateStudentCommand,
             return Result<CreateStudentResponseDto>.Failure(new string[] { "User is already exists" });
         }
 
-        var createUserResult = await _identityService.CreateUserAsync(userRequest.Email, userRequest.Password, Role.Student);
+        var createUserResult = await _identityService.CreateUserAsync(userRequest.Email, userRequest.Password, userRequest.PhoneNumber, Role.Student);
         if (!createUserResult.Result.Succeeded)
         {
             return Result<CreateStudentResponseDto>.Failure(createUserResult.Result.Errors);

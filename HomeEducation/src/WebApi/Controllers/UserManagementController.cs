@@ -1,4 +1,5 @@
-﻿using HomeEducation.Application.Commands.UserManagementCommands;
+﻿using HomeEducation.Application.Commands.StudentCommands;
+using HomeEducation.Application.Commands.UserManagementCommands;
 using HomeEducation.Application.Common.Interfaces;
 using HomeEducation.Application.Common.Models;
 using HomeEducation.Application.Queries.UserManagementQuesries;
@@ -33,7 +34,20 @@ public class UserManagementController : ApiControllerBase
     public async Task<IActionResult> LoginUser([FromBody] LoginRequestDto loginRequest)
     {
         var result = await Mediator.Send(new UserManagementLoginCommand(loginRequest));
-        if(result.Succeeded)
+        if (result.Succeeded)
+            return Ok(result);
+
+        return Unauthorized(result);
+    }
+
+    [Route("studentLogin")]
+    [AllowAnonymous]
+    [Produces(typeof(Result<string>))]
+    [HttpPost]
+    public async Task<IActionResult> LoginStudentUser([FromBody] LoginStudentRequestDto loginRequest)
+    {
+        var result = await Mediator.Send(new StudentLoginCommand(loginRequest));
+        if (result.Succeeded)
             return Ok(result);
 
         return Unauthorized(result);

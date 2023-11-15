@@ -53,7 +53,7 @@ public class CreateTeacherCommandHandler : IRequestHandler<CreateTeacherCommand,
                 return Result<string>.Failure(new string[] { $"Faild to create user {teacher.Id}: {teacher.FirstName} {teacher.LastName}, Levels are wrong" });
             }
 
-            var createUserResult = await _identityService.CreateUserAsync(userRequest.Email, userRequest.Password, Role.Teacher);
+            var createUserResult = await _identityService.CreateUserAsync(userRequest.Email, userRequest.Password, userRequest.PhoneNumber,Role.Teacher);
             if (!createUserResult.Result.Succeeded)
             {
                 return createUserResult.Result;

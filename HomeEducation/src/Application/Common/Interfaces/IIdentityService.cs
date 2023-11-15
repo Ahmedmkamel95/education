@@ -10,10 +10,10 @@ public interface IIdentityService
     Task<bool> IsInRoleAsync(string userId, string role);
     Task<string?> GetUserRole(string userId);
     Task<bool> AuthorizeAsync(string userId, string policyName);
-
+    Task<Result<string>> AuthenticateStudentAsync(string email, string phoneNumber, string password);
     Task<Result<string>> AuthenticateUserAsync(string email, string password);
 
-    Task<(Result<string> Result, string UserId, string Token)> CreateUserAsync(string userName, string password, string role);
+    Task<(Result<string> Result, string UserId, string Token)> CreateUserAsync(string userName, string password, string phoneNumber, string role);
 
     Task<Result<string>> DeleteUserAsync(string userId);
 }

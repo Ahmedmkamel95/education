@@ -296,6 +296,38 @@
         }
       }
     },
+    "/api/user/studentLogin": {
+      "post": {
+        "tags": [
+          "UserManagement"
+        ],
+        "operationId": "UserManagement_LoginStudentUser",
+        "requestBody": {
+          "x-name": "loginRequest",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/LoginStudentRequestDto"
+              }
+            }
+          },
+          "required": true,
+          "x-position": 1
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResultOfString"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/user/profile": {
       "get": {
         "tags": [
@@ -732,6 +764,33 @@
             "minLength": 1
           }
         }
+      },
+      "LoginStudentRequestDto": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/LoginRequestDto"
+          },
+          {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "macAddress": {
+                "type": "string"
+              },
+              "firebaseToken": {
+                "type": "string"
+              },
+              "email": {
+                "type": "string",
+                "nullable": true
+              },
+              "phoneNumber": {
+                "type": "string",
+                "nullable": true
+              }
+            }
+          }
+        ]
       },
       "ResultOfUserProfileOfUser": {
         "type": "object",
